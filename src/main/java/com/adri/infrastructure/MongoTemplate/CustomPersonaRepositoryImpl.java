@@ -18,7 +18,7 @@ public class CustomPersonaRepositoryImpl implements CustomPersonaRepository{
     public Persona updatePersona(String id, Persona persona) {
         Query query = new Query(Criteria.where("_id").is(id));
         Update update = new Update();
-        if(!persona.getName().isEmpty()){
+        if(persona.getName() != null){
             update.set("name", persona.getName());
         }
         if(persona.getAge() > 0){
@@ -26,8 +26,7 @@ public class CustomPersonaRepositoryImpl implements CustomPersonaRepository{
         }
         UpdateResult result = mongoTemplate.updateFirst(query, update, Persona.class);
         if(result != null){
-            persona.setId(id);
-            return persona;
+            return mongoTemplate.findById(id, Persona.class);
         }else{
             return null;
         }

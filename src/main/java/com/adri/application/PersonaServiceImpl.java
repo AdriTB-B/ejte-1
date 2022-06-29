@@ -37,7 +37,7 @@ public class PersonaServiceImpl implements PersonaService {
     @Override
     public Persona update(String id, Persona persona) {
         Persona personaToUpdate = personaRepo.findById(id).orElseThrow();
-        if(!persona.getName().isEmpty()){
+        if(persona.getName() != null){
             personaToUpdate.setName(persona.getName());
         }
         if(persona.getAge() > 0){
