@@ -56,6 +56,7 @@ class PersonaServiceImplTest {
 
     @Test
     void deleteById() {
+        when(personaRepo.findById(Mockito.any(String.class))).thenReturn(Optional.of(new Persona()));
         underTest.deleteById("1234");
         verify(personaRepo).deleteById(Mockito.any(String.class));
     }

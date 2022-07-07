@@ -3,7 +3,10 @@ package com.adri.infrastructure;
 import com.adri.application.port.PersonaService;
 import com.adri.domain.Persona;
 import com.adri.infrastructure.dto.PersonaDTO;
+import jdk.jfr.ContentType;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +27,7 @@ public class PersonaMRController {
     public List<PersonaDTO> getAll(){
         return personaService.getAll().stream().map(PersonaDTO::new).collect(Collectors.toList());
     }
+
     @GetMapping("/name/{name}")
     public List<PersonaDTO> getByName(@PathVariable("name")String name){
         return personaService.findByName(name).stream().map(PersonaDTO::new).collect(Collectors.toList());
@@ -35,8 +39,13 @@ public class PersonaMRController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") String id){
-        personaService.deleteById(id);
+    public ResponseEntity<String> delete(@PathVariable("id") String id){
+        try{
+            personaService.deleteById(id);
+            return new ResponseEntity<>("Registro con id: " + id + " eliminado", HttpStatus.OK);
+        }catch(RuntimeException e){
+            return new ResponseEntity<>("No se ha podido eliminar el registro con id: " + id, HttpStatus.NOT_FOUND);
+        }
     }
 
 }

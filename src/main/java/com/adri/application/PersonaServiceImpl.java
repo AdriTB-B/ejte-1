@@ -31,7 +31,11 @@ public class PersonaServiceImpl implements PersonaService {
 
     @Override
     public void deleteById(String id) {
-        personaRepo.deleteById(id);
+        if(personaRepo.findById(id).isPresent()){
+            personaRepo.deleteById(id);
+        }else{
+            throw new RuntimeException("No hay registrada ninguna persona con id " + id);
+        }
     }
 
     @Override
